@@ -1,10 +1,10 @@
 # Einkaufsliste Türöffner
 
-Konkrete Teile zum Bestellen, aufgeteilt in Bestellwellen. Grundlage ist [KONZEPT.md](KONZEPT.md): ESP32 mit PhotoMOS am Ritto-TwinBus-Wohntelefon 4630/01 (Haustür) und starkem Servo an der Klinke (Wohnungstür).
+Konkrete Teile zum Bestellen, aufgeteilt in Bestellwellen. Grundlage ist [KONZEPT.md](KONZEPT.md): ESP32 mit Relaismodul am Ritto-TwinBus-Wohntelefon 4630/01 (Haustür) und starkem Servo an der Klinke (Wohnungstür).
 
 Preise sind **Richtwerte** (Stand Oktober 2026, Brutto, ohne Versand) und schwanken je Händler stark. Mengenangaben sind so gewählt, dass immer ein Ersatzteil da ist — beim Löten an einer fremden Anlage willst du nicht wegen eines gegrillten Bauteils zwei Wochen warten.
 
-> **Wichtig: nicht alles auf einmal bestellen.** Der Servo ist der teuerste Einzelposten und die richtige Größe steht erst nach dem Messen fest. Der PhotoMOS passt nur, wenn die Spannung am Taster im erwarteten Bereich liegt. Deshalb die Reihenfolge unten einhalten.
+> **Wichtig: nicht alles auf einmal bestellen.** Der Servo ist der teuerste Einzelposten und die richtige Größe steht erst nach dem Messen fest. Welle 0 bis 2 kannst du dagegen sofort bestellen.
 
 ---
 
@@ -28,8 +28,8 @@ Diese Welle entscheidet, *was* du danach kaufst. Vieles davon hast du vielleicht
 
 | Messergebnis | Konsequenz für die Bestellung |
 |---|---|
-| Spannung am Taster < 60 V, Strom < 0,4 A (Normalfall bei TwinBus) | PhotoMOS **AQY212EH** wie in Welle 2. |
-| Spannung oder Strom höher | Statt PhotoMOS ein **Relaismodul mit Optokoppler** (Kontakte ≥ 2 A) nehmen — siehe „Fallbacks“. |
+| Spannung am Taster im Kleinspannungsbereich (Normalfall bei TwinBus) | Keine Bauteilentscheidung nötig — das Relaismodul aus Welle 2 deckt mit 10 A / 250 V AC jeden realistischen Fall ab. Die Messung bestätigt nur, dass du richtig liegst, und hilft beim Finden des Tasters. |
+| Unerwartet hohe Spannung (über ~60 V) oder Netzspannung | **Stopp, nicht weiterbauen.** Dann hast du nicht den Taster erwischt, sondern etwas anderes. Erst klären, dann anklemmen. |
 | Klinkenkraft am Griffende ≤ 2,5 kg | Servo mit **35 kg·cm** reicht (DS3235). |
 | Klinkenkraft 2,5–4 kg | Direkt **60 kg·cm** nehmen (DS5160). Siehe Hinweis zur Nennspannung unten. |
 | Klinke schwergängig / über 4 kg | Erst Schloss fetten/einstellen, dann neu messen. Sonst wird auch ein starker Servo unzuverlässig. |
@@ -47,9 +47,9 @@ Damit baust du den Aufbau auf dem Breadboard mit **LED statt Relais und Servo** 
 | USB-Netzteil 5 V / 1 A | beliebiges Handy-Netzteil | 1 | 0–7 € | Dauerversorgung des ESP32. |
 | Breadboard | 830 Kontakte | 1 | 4–6 € | |
 | Jumperkabel-Set | m/m und m/f, 20 cm | 1 | 5–8 € | |
-| LED 5 mm + 1 kΩ Widerstand | LED-Sortiment oder 10× rot | 1 | 2–4 € | **Platzhalter für PhotoMOS und Servo beim ersten Test** (Schritt 5 im Konzept): LED blinkt, wo später die Tür aufgeht. |
-| Lochrasterplatine | 5×7 cm, Streifenraster, 5er-Pack | 1 | 5–8 € | Trägt später PhotoMOS + Widerstand. |
-| Stiftleisten 2,54 mm | 40-polig, gerade, 5er-Pack | 1 | 3–5 € | |
+| LED 5 mm + 1 kΩ Widerstand | LED-Sortiment oder 10× rot | 1 | 2–4 € | **Platzhalter für Relais und Servo beim ersten Test** (Schritt 5 im Konzept): LED blinkt, wo später die Tür aufgeht. |
+| Lochrasterplatine | 5×7 cm, Streifenraster, 5er-Pack | optional | 5–8 € | War für den PhotoMOS gedacht. Das Relaismodul ist eine fertige Platine — **brauchst du für diesen Aufbau nicht mehr.** |
+| Stiftleisten 2,54 mm | 40-polig, gerade, 5er-Pack | optional | 3–5 € | Siehe Lochrasterplatine — fürs Relaismodul nicht nötig. |
 | Kunststoffgehäuse | ABS-Gehäuse ca. 100 × 60 × 25 mm | 1 | 5–8 € | ESP32 soll nicht offen neben dem Haustelefon hängen. |
 
 **Zwischensumme:** ca. 40–60 €.
@@ -66,16 +66,16 @@ Direkt bestellbar, ohne auf Messwerte zu warten. Die **ASIN** ist jeweils der da
 |---|---|---|---|
 | 1 | [2× ESP32DevKitC, ESP-WROOM-32D](https://www.amazon.de/dp/B0D4QBCCCZ) — ASIN `B0D4QBCCCZ` | 1 Set | Genau die zwei Boards, die du brauchst. Alternativen: [AITRIP 2× ESP32-DevKitC-32, USB-C/CH340C](https://www.amazon.de/dp/B0BRB64NCH) (`B0BRB64NCH`) oder [AZDelivery 5× DevKit C V4, USB-C](https://www.amazon.de/dp/B0DJ2XYKK2) (`B0DJ2XYKK2`) — deutscher Anbieter, aber 5 Stück. |
 | 2 | [BOJACK Breadboard-Set: 2× 830 + 2× 400 Kontakte + 126 Jumperkabel](https://www.amazon.de/dp/B0B18G3V5T) — ASIN `B0B18G3V5T` | 1 Set | **Deckt zwei Posten auf einmal** (Breadboard und Jumperkabel). Alternative: [GTIWUNG 4× 830 + Kabel](https://www.amazon.de/dp/B0CFXYP5SF) (`B0CFXYP5SF`). |
-| 3 | [WayinTop 200× LED 5 mm + 600 Widerstände, 30 Werte 10 Ω–1 MΩ](https://www.amazon.de/dp/B07YWX42RJ) — ASIN `B07YWX42RJ` | 1 Set | **Deckt auch die 220 Ω aus Welle 2 ab**, siehe unten. Dass laut Bewertungen die LED-Farben streuen, ist für eine Test-LED egal. |
-| 4 | [Streifenrasterplatine 100 × 160 mm, RM 2,54, 5 Stück](https://www.amazon.de/dp/B008N7RZ3M) — ASIN `B008N7RZ3M` | 1 Set | Streifenraster wie im Konzept — Leiterbahnen lassen sich mit dem Messer durchtrennen. Alternative ohne Streifen: [Hartpapier 60 × 100 mm](https://www.amazon.de/dp/B0CGLN1CF7) (`B0CGLN1CF7`). |
-| 5 | [IZOKEE 30× Stift- und Buchsenleisten, 40-polig, RM 2,54](https://www.amazon.de/dp/B07DBY753C) — ASIN `B07DBY753C` | 1 Set | 15 Stift- und 15 Buchsenleisten, zum Ablängen. |
+| 3 | [WayinTop 200× LED 5 mm + 600 Widerstände, 30 Werte 10 Ω–1 MΩ](https://www.amazon.de/dp/B07YWX42RJ) — ASIN `B07YWX42RJ` | 1 Set | Test-LED plus 1 kΩ Vorwiderstand für den Trockenlauf. Dass laut Bewertungen die LED-Farben streuen, ist dafür egal. |
+| 4 | [Streifenrasterplatine 100 × 160 mm, RM 2,54, 5 Stück](https://www.amazon.de/dp/B008N7RZ3M) — ASIN `B008N7RZ3M` | **optional** | Streifenraster wie im Konzept — Leiterbahnen lassen sich mit dem Messer durchtrennen. Alternative ohne Streifen: [Hartpapier 60 × 100 mm](https://www.amazon.de/dp/B0CGLN1CF7) (`B0CGLN1CF7`). |
+| 5 | [IZOKEE 30× Stift- und Buchsenleisten, 40-polig, RM 2,54](https://www.amazon.de/dp/B07DBY753C) — ASIN `B07DBY753C` | **optional** | Wie Pos 4: war für den PhotoMOS-Aufbau. Das Relaismodul bringt Schraubklemmen und Stiftleiste mit. |
 | 6 | [Projektgehäuse ABS 100 × 60 × 25 mm](https://www.amazon.de/dp/B0DWRPN2S6) — ASIN `B0DWRPN2S6` | 1 | Innenmaß ca. 96 × 56 × 23 mm, das ESP32-DevKitC ist ca. 55 × 28 mm — passt mit Platz für die Lochrasterplatine. Alternative als 5er-Pack: [VGEBY](https://www.amazon.de/dp/B074Z7TZYP) (`B074Z7TZYP`). |
 | 7 | USB-Kabel + 5-V-Netzteil | 1 | **Bewusst ohne Link**, weil es vom gewählten Board abhängt: USB-C bei AITRIP und AZDelivery, Micro-USB beim DevKitC-Klassiker. Ein normales Handy-Netzteil und ein vorhandenes Datenkabel reichen — reine Ladekabel ohne Datenleitungen funktionieren nicht. |
 
-### Zwei Posten fallen damit weg
+### Was damit wegfällt
 
 - Pos 2 ersetzt die getrennten Zeilen „Breadboard" und „Jumperkabel-Set" aus der Tabelle oben.
-- Pos 3 enthält die **220-Ω-Widerstände für den PhotoMOS** aus Welle 2 mit. Die Zeile „Widerstand 220 Ω" dort kannst du streichen, wenn du dieses Set nimmst.
+- **Pos 4 und 5 brauchst du nicht**, seit die Haustür über ein fertiges Relaismodul statt über einen selbst aufgebauten PhotoMOS läuft. Nur mitnehmen, wenn du ohnehin Lochraster im Haus haben willst.
 
 ### Worauf du beim Board achten musst
 
@@ -85,45 +85,33 @@ Direkt bestellbar, ohne auf Messwerte zu warten. Die **ASIN** ist jeweils der da
 
 ---
 
-## Welle 2: Haustür (nach dem Messen am Taster)
+## Welle 2: Haustür (sofort bestellbar)
 
 | Teil | Suchbegriff / Beispiel | Menge | ca. | Hinweis |
 |---|---|---|---|---|
-| PhotoMOS-Relais | **Panasonic AQY212EH** (AQY21x-Familie) | 2 | je 3–6 € | **Auf das Gehäuse achten:** Durchsteckvariante für die Lochrasterplatine, nicht die SMD-Ausführung. Beim Händler Datenblatt gegenprüfen (Lastspannung, Laststrom, LED-Strom), bevor du bestellst. Zur Händlerwahl siehe „Eine Ausnahme von ‚No-Name ist ok'" unten — das ist der eine Posten, bei dem die Herkunft zählt. |
-| Widerstand 220 Ω | 1/4 W, Metallschicht, 10er-Pack | 1 | 1–2 € | Vorwiderstand für die LED-Seite des PhotoMOS (GPIO 26 → 220 Ω → Pin 1). **Entfällt**, wenn du das LED-/Widerstandsset aus der Amazon-Liste in Welle 1 (Pos 3) nimmst. |
+| 1-Kanal-Relaismodul 3,3 V | mit Optokoppler, **Low-Level-Trigger** | 2 | je 4–7 € | Das gewählte Bauteil (Entscheidung vom 12.10.2026, Begründung in Abschnitt 2 des Konzepts). Fertige Platine mit Schraubklemmen — kein Löten, kein Vorwiderstand, keine Lochrasterplatine. Zwei Stück: eins zum Testen, eins fürs Telefon. |
 | Litze flexibel 0,14 mm² (AWG 26) | rot und schwarz, je 5–10 m | 1 Set | 5–8 € | Dünn und weich, damit die Lötstellen auf der Ritto-Platine nicht mechanisch belastet werden. |
 | Steckverbinder 2-polig | JST-XH-Set mit Crimpzange, **oder** einfacher: 2-polige Schraubklemme / Dupont-Steckerpaar | 1 | 3–12 € | Laut Konzept-Entscheidung soll die Verbindung zum ESP32 **steckbar** sein, damit das Telefon beim Rückbau einfach abgeht. |
 | Schrumpfschlauch-Sortiment | 1–6 mm | 1 | 4–6 € | |
 | Kabelbinder + Klebesockel | klein, 2,5 mm | 1 Set | 3–5 € | Zugentlastung der Litzen am Telefon — die wichtigste Maßnahme gegen abgerissene Lötpunkte. |
 
-**Zwischensumme:** ca. 20–40 €.
+**Zwischensumme:** ca. 15–30 €.
 
 ### Welle 2 als Amazon.de-Bestellliste
 
 | Pos | Artikel | Menge | Hinweis |
 |---|---|---|---|
-| 1 | [PhotoMOS AQY212EH, 5er-Pack](https://www.amazon.de/dp/B0FP49SXLF) — ASIN `B0FP49SXLF` | 1 Set | No-Name, 5 Stück. Eine Listung nennt **60 V / 550 mA** — deckt sich mit der Annahme im Konzept. Einzelstück: [`B0CX18THFP`](https://www.amazon.de/dp/B0CX18THFP). Die Panasonic-Originallistung [`B017U4VSWM`](https://www.amazon.de/dp/B017U4VSWM) stand im Index auf „nicht verfügbar". Siehe die Ausnahme unten. |
-| 2 | [Relaismodul 3,3 V, Low-Level-Trigger, mit Optokoppler](https://www.amazon.de/dp/B0CL748J9C) — ASIN `B0CL748J9C` | 1 | Der **Fallback aus dem Konzept — und bei Amazon die robustere Beschaffung als der PhotoMOS.** Alternativen: [`B0DBZQVWPM`](https://www.amazon.de/dp/B0DBZQVWPM), [`B0DJ6PD435`](https://www.amazon.de/dp/B0DJ6PD435) (3,3 V **und** 5 V). Zwei Dinge beachten, siehe unten. |
-| 3 | [Schrumpfschlauch-Set, 100 Stück, 6 Größen, 2:1](https://www.amazon.de/dp/B003H9CJ1Y) — ASIN `B003H9CJ1Y` | 1 | Billigste brauchbare Variante. Alternative **mit Kabelbindern drin**: [`B004CRC352`](https://www.amazon.de/dp/B004CRC352) — spart die eigene Kabelbinder-Zeile. |
-| 4 | [Zwillingslitze 0,14 mm², 10 m, 2-adrig](https://www.amazon.de/dp/B002QE5OKY) — ASIN `B002QE5OKY` | 1 | 2-adrig heißt: ein Kabel zum Telefon statt zwei einzelne. 10 m ist für zwei 30-cm-Strippen reichlich, aber die kleinste sinnvolle Menge. Einzelspule 25 m: [`B0774W79T7`](https://www.amazon.de/dp/B0774W79T7). |
-| 5 | Steckverbinder 2-polig | 0 | **Entfällt.** Nimm zwei Jumperkabel aus Welle 1 Pos 2, schneide eine Seite ab und löte sie an — das ist genau der steckbare Übergang, den das Konzept für den Rückbau will. |
-| 6 | Widerstand 220 Ω | 0 | **Entfällt**, steckt im LED-Set aus Welle 1 Pos 3. |
+| 1 | [Relaismodul 3,3 V, 1 Kanal, Low-Level-Trigger, mit Optokoppler](https://www.amazon.de/dp/B0CL748J9C) — ASIN `B0CL748J9C` | 1–2 | **Das Hauptbauteil für die Haustür.** Alternativen: [`B0DBZQVWPM`](https://www.amazon.de/dp/B0DBZQVWPM) oder [`B0DJ6PD435`](https://www.amazon.de/dp/B0DJ6PD435) — letzteres läuft auf **3,3 V und 5 V** und ist damit die sichere Wahl, siehe unten. |
+| 2 | [Schrumpfschlauch-Set, 100 Stück, 6 Größen, 2:1](https://www.amazon.de/dp/B003H9CJ1Y) — ASIN `B003H9CJ1Y` | 1 | Billigste brauchbare Variante. Alternative **mit Kabelbindern drin**: [`B004CRC352`](https://www.amazon.de/dp/B004CRC352) — spart die eigene Kabelbinder-Zeile. |
+| 3 | [Zwillingslitze 0,14 mm², 10 m, 2-adrig](https://www.amazon.de/dp/B002QE5OKY) — ASIN `B002QE5OKY` | 1 | 2-adrig heißt: ein Kabel zum Telefon statt zwei einzelne. 10 m ist für zwei 30-cm-Strippen reichlich, aber die kleinste sinnvolle Menge. Einzelspule 25 m: [`B0774W79T7`](https://www.amazon.de/dp/B0774W79T7). |
+| 4 | Steckverbinder 2-polig | 0 | **Entfällt.** Nimm zwei Jumperkabel aus Welle 1 Pos 2, schneide eine Seite ab und löte sie an — das ist genau der steckbare Übergang, den das Konzept für den Rückbau will. |
+| 5 | Widerstand 220 Ω, Lochraster, Stiftleisten | 0 | **Entfallen alle** — die brauchte nur der PhotoMOS. |
 
-#### Beim Relaismodul zwei Dinge beachten
+#### Beim Relaismodul beachten
 
 - **VCC des Moduls an den 3V3- oder 5V-Pin des ESP32, nicht an einen GPIO.** Eine Bewertung misst rund 100 mA Stromaufnahme; ein ESP32-GPIO darf etwa 40 mA. An den GPIO kommt nur `IN`.
-- **Low-Level-Trigger heißt `RELAIS_AKTIV_HIGH false`** in `config.h`. Das genannte Modul schaltet bei 0 V am Eingang. Bewertungen zu anderen 3,3-V-Modulen berichten, dass die Relaisspule bei 3,3 V nicht sicher anzieht und 5 V braucht — dann die 5-V-Variante nehmen und vom 5V-Pin versorgen.
-
-#### Eine Ausnahme von „No-Name ist ok"
-
-Beim Breadboard, beim Servo, bei Litze und Gehäuse ist No-Name folgenlos — da bin ich ganz bei dir. Der PhotoMOS ist der eine Posten, bei dem es das nicht ist: er stellt die **galvanische Trennung zwischen ESP32 und Ritto-Bus** her. Ein falsch deklariertes Teil mit geringerer Isolationsfestigkeit kann die Gegensprechanlage beschädigen, und die gehört dem Vermieter und hängt am ganzen Haus. Dass die Amazon-Listungen bei Strom und Isolationsspannung widersprüchliche Werte nennen (0,55 A gegen 1 A, 3750 Vrms „je nach Modell"), ist genau dieses Problem.
-
-Zwei Wege, beide legitim:
-
-- **Günstig und trotzdem sauber: Pos 2, das Relaismodul.** Ein mechanisches Relais trennt durch einen Luftspalt, den man sehen kann — die Trennung hängt nicht an einer Datenblattangabe. Damit ist der No-Name-Weg hier sogar der unkritischere, und es kostet 4–7 € statt 25 €.
-- **PhotoMOS vom Distributor**, bei Reichelt oder Mouser, 3–6 € statt ~2 €. Dafür lautlos und ohne Klicken direkt neben der Wohnungstür.
-
-Deine Entscheidung — nur nicht der No-Name-PhotoMOS als einziges Trennglied, ohne das gemessen zu haben.
+- **`RELAIS_AKTIV_HIGH` steht in `config.example.h` jetzt auf `false`**, passend zum Low-Level-Trigger: das Modul schaltet bei 0 V am Eingang. Nimmst du doch ein High-Level-Modul, muss der Wert auf `true`.
+- **Wenn das Relais bei 3,3 V nicht sicher anzieht**, berichten Bewertungen zu solchen Modulen — dann die 3,3-/5-V-Variante nehmen und `VCC` vom 5V-Pin versorgen. Der Trigger bleibt davon unberührt, der läuft über den Optokoppler.
 
 ---
 
@@ -195,8 +183,8 @@ Ein 7,5-V-Netzteil mit ≥ 4 A war nicht zu finden; die 7,5-V-Angebote liegen be
 | Umfang | ca. |
 |---|---|
 | Nur Welle 1 (Software testen, LED statt Hardware) | **40–60 €** |
-| Welle 1 + 2 (Haustür funktioniert) | **60–100 €** |
-| Welle 1 + 2 + 3 + 4 (komplett, beide Türen) | **130–190 €** |
+| Welle 1 + 2 (Haustür funktioniert) | **55–90 €** |
+| Welle 1 + 2 + 3 + 4 (komplett, beide Türen) | **125–180 €** |
 | Zusätzlich Werkzeug, falls nichts vorhanden | **+ 60–110 €** |
 
 ---
@@ -205,7 +193,6 @@ Ein 7,5-V-Netzteil mit ≥ 4 A war nicht zu finden; die 7,5-V-Angebote liegen be
 
 | Teil | ca. | Wann |
 |---|---|---|
-| 1-Kanal-Relaismodul 3,3 V mit Optokoppler | 4–7 € | Wenn die Messung am Taster mehr als 60 V oder mehr als 0,4 A ergibt. Dann in `config.h` `RELAIS_AKTIV_HIGH` prüfen — viele Module schalten bei LOW. |
 | Zweites Ritto TwinBus Wohntelefon 4630 (gebraucht) | 25–60 € | Nur falls du die Entscheidung vom 12.10. doch umdrehst und das Original komplett unangetastet lassen willst. Dann nur das Zweitgerät umbauen und tauschen (Zuordnung über den gelben Program-Taster). |
 | WLAN-Repeater oder Mesh-Knoten | 30–70 € | Wenn Schritt 4 im Konzept zeigt, dass am Briefkasten kein WLAN ankommt. **Das vorher mit dem Handy prüfen** — ohne Empfang an der Haustür ist das ganze Projekt wirkungslos. |
 | Smart Lock (Nuki Go / Nuki 4, Bold, Yale Linus) | 150–280 € | Wenn die Klinken-Mechanik unzuverlässig bleibt oder die Wohnungstür auch **abgeschlossen** geöffnet werden soll. Der Servo zieht nur die Falle zurück, nie den Riegel. |
@@ -217,6 +204,7 @@ Ein 7,5-V-Netzteil mit ≥ 4 A war nicht zu finden; die 7,5-V-Angebote liegen be
 - **Keinen Arduino Uno R4 WiFi** oder Uno/Nano mit WLAN-Shield — teurer und schwächer als der ESP32 (Begründung in Abschnitt 1 des Konzepts).
 - **Nichts für 230 V**, keinen Klingeltrafo, keine Verteilerkomponenten. Es wird ausschließlich am Haustelefon auf Kleinspannungsseite gearbeitet.
 - **Keinen Bus-Adapter** für TwinBus. Wir zapfen den Taster auf der Platine an, der Bus bleibt unberührt.
+- **Keinen PhotoMOS und keinen Vorwiderstand.** War bis zum 12.10.2026 der Plan, ersetzt durch das Relaismodul — fertige Platine, lötfrei, Trennung durch Luftspalt statt durch Datenblattangabe.
 - **Keinen Raspberry Pi und keinen Server.** Webseite und Logik laufen komplett auf dem ESP32.
 - **Kein Zertifikat, keine Domain, kein Cloud-Abo.** Das Ding ist nur im Heim-WLAN erreichbar, und das bleibt so (Abschnitt 5 des Konzepts).
 - **Keine Endschalter oder H-Brücke.** Die gehören zum Linearaktuator, der im Konzept gegen den Servo verloren hat.
@@ -227,10 +215,9 @@ Ein 7,5-V-Netzteil mit ≥ 4 A war nicht zu finden; die 7,5-V-Angebote liegen be
 
 | Händler | Wofür | Lieferzeit |
 |---|---|---|
-| Reichelt, Conrad | Nur noch für den PhotoMOS wirklich nötig (Originalware mit Datenblatt). Alles andere ist bei Amazon oder AliExpress billiger. | 1–3 Tage |
-| Mouser, Digi-Key | PhotoMOS, wenn bei Reichelt/Conrad nicht lieferbar | 2–5 Tage |
+| Reichelt, Conrad | Nur noch, wenn du etwas Bestimmtes mit Datenblatt brauchst. Für diese Liste nicht nötig. | 1–3 Tage |
 | Amazon | ESP32-Boards, Breadboard, Jumperkabel, Werkzeug, wenn es schnell gehen soll | 1–2 Tage |
-| AliExpress | Servo und Kleinteile am günstigsten, No-Name ist für alles außer dem PhotoMOS unkritisch | 2–4 Wochen |
+| AliExpress | Servo und Kleinteile am günstigsten, No-Name ist hier durchgehend unkritisch | 2–4 Wochen |
 | Baumarkt | Alu-Profil, Montageband, Moosgummi, Schraubzwinge | sofort |
 
 Praktisch: Werkzeug und Welle 1 zusammen bei einem Händler bestellen, den Servo wegen der Lieferzeit **direkt nach der Kraftmessung** separat — der ist sonst der Posten, auf den du am Ende drei Wochen wartest.
@@ -242,6 +229,6 @@ Praktisch: Werkzeug und Welle 1 zusammen bei einem Händler bestellen, den Servo
 1. Welle 0 besorgen (oder feststellen, dass alles da ist).
 2. Welle 1 bestellen und parallel: Haustelefon aufschrauben, Taster durchmessen, Klinkenkraft wiegen, WLAN an der Haustür prüfen.
 3. Firmware flashen und mit LED testen, bis die Weboberfläche im Handy sauber läuft.
-4. Welle 2 bestellen, PhotoMOS auf Lochraster aufbauen, erst gegen das Multimeter testen (Durchgang beim Schalten), dann ans Telefon löten.
+4. Relaismodul am Breadboard testen: GPIO 26 an `IN`, `VCC` an 3V3/5V, mit dem Multimeter den Durchgang am Schließer prüfen. Erst dann die Litzen ans Telefon löten.
 5. Welle 3 bestellen, sobald die Kraft gemessen ist. Servo frei in der Hand einstellen (`SERVO_RUHE_US` / `SERVO_GEDRUECKT_US`), erst dann an die Tür.
 6. Welle 4 und QR-Code an den Briefkasten.

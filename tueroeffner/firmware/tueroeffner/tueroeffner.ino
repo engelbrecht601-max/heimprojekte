@@ -1,5 +1,5 @@
 // Türöffner – ESP32 (Arduino-Core 3.x), keine Zusatzbibliotheken nötig.
-// Haustür: Relais/PhotoMOS parallel zur Türöffner-Taste der Gegensprechanlage.
+// Haustür: Relaismodul (Schließer) parallel zur Türöffner-Taste der Gegensprechanlage.
 // Wohnungstür: Servo drückt die Klinke herunter.
 // Bedienung über Webseite im lokalen WLAN, Anmeldung per persönlicher PIN.
 
