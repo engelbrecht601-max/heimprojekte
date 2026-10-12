@@ -56,6 +56,33 @@ Damit baust du den Aufbau auf dem Breadboard mit **LED statt Relais und Servo** 
 
 Nach dieser Welle kannst du den kompletten Software-Teil abhaken: Firmware flashen, feste IP im Router, QR-Code, PIN-Login, Protokoll — alles aus Abschnitt 4, 5 und 8 des Konzepts.
 
+### Welle 1 als Amazon.de-Bestellliste
+
+Direkt bestellbar, ohne auf Messwerte zu warten. Die **ASIN** ist jeweils der dauerhafte Teil — falls ein Link irgendwann ins Leere läuft, ASIN in die Amazon-Suche kopieren.
+
+> **Preise und Verfügbarkeit beim Klick prüfen.** Diese Links stammen aus dem Suchindex; die Amazon-Produktseiten selbst waren aus der Arbeitsumgebung heraus nicht aufrufbar (Netzwerk-Policy), konnten also nicht live gegengeprüft werden. Bei Marktplatz-Artikeln wechseln Preis, Anbieter und Lieferbarkeit ständig — bei mehreren Breadboard-Sets zeigte der Index schon „derzeit nicht verfügbar".
+
+| Pos | Artikel | Menge | Hinweis |
+|---|---|---|---|
+| 1 | [2× ESP32DevKitC, ESP-WROOM-32D](https://www.amazon.de/dp/B0D4QBCCCZ) — ASIN `B0D4QBCCCZ` | 1 Set | Genau die zwei Boards, die du brauchst. Alternativen: [AITRIP 2× ESP32-DevKitC-32, USB-C/CH340C](https://www.amazon.de/dp/B0BRB64NCH) (`B0BRB64NCH`) oder [AZDelivery 5× DevKit C V4, USB-C](https://www.amazon.de/dp/B0DJ2XYKK2) (`B0DJ2XYKK2`) — deutscher Anbieter, aber 5 Stück. |
+| 2 | [BOJACK Breadboard-Set: 2× 830 + 2× 400 Kontakte + 126 Jumperkabel](https://www.amazon.de/dp/B0B18G3V5T) — ASIN `B0B18G3V5T` | 1 Set | **Deckt zwei Posten auf einmal** (Breadboard und Jumperkabel). Alternative: [GTIWUNG 4× 830 + Kabel](https://www.amazon.de/dp/B0CFXYP5SF) (`B0CFXYP5SF`). |
+| 3 | [WayinTop 200× LED 5 mm + 600 Widerstände, 30 Werte 10 Ω–1 MΩ](https://www.amazon.de/dp/B07YWX42RJ) — ASIN `B07YWX42RJ` | 1 Set | **Deckt auch die 220 Ω aus Welle 2 ab**, siehe unten. Dass laut Bewertungen die LED-Farben streuen, ist für eine Test-LED egal. |
+| 4 | [Streifenrasterplatine 100 × 160 mm, RM 2,54, 5 Stück](https://www.amazon.de/dp/B008N7RZ3M) — ASIN `B008N7RZ3M` | 1 Set | Streifenraster wie im Konzept — Leiterbahnen lassen sich mit dem Messer durchtrennen. Alternative ohne Streifen: [Hartpapier 60 × 100 mm](https://www.amazon.de/dp/B0CGLN1CF7) (`B0CGLN1CF7`). |
+| 5 | [IZOKEE 30× Stift- und Buchsenleisten, 40-polig, RM 2,54](https://www.amazon.de/dp/B07DBY753C) — ASIN `B07DBY753C` | 1 Set | 15 Stift- und 15 Buchsenleisten, zum Ablängen. |
+| 6 | [Projektgehäuse ABS 100 × 60 × 25 mm](https://www.amazon.de/dp/B0DWRPN2S6) — ASIN `B0DWRPN2S6` | 1 | Innenmaß ca. 96 × 56 × 23 mm, das ESP32-DevKitC ist ca. 55 × 28 mm — passt mit Platz für die Lochrasterplatine. Alternative als 5er-Pack: [VGEBY](https://www.amazon.de/dp/B074Z7TZYP) (`B074Z7TZYP`). |
+| 7 | USB-Kabel + 5-V-Netzteil | 1 | **Bewusst ohne Link**, weil es vom gewählten Board abhängt: USB-C bei AITRIP und AZDelivery, Micro-USB beim DevKitC-Klassiker. Ein normales Handy-Netzteil und ein vorhandenes Datenkabel reichen — reine Ladekabel ohne Datenleitungen funktionieren nicht. |
+
+### Zwei Posten fallen damit weg
+
+- Pos 2 ersetzt die getrennten Zeilen „Breadboard" und „Jumperkabel-Set" aus der Tabelle oben.
+- Pos 3 enthält die **220-Ω-Widerstände für den PhotoMOS** aus Welle 2 mit. Die Zeile „Widerstand 220 Ω" dort kannst du streichen, wenn du dieses Set nimmst.
+
+### Worauf du beim Board achten musst
+
+- **38-polige Variante.** Die Firmware nutzt GPIO 25 und 26 (`config.example.h`); auf den kleineren 30-Pin-Boards fehlen die teils.
+- **USB-Chip:** CH340 oder CP2102. Beide funktionieren, brauchen unter Windows aber unterschiedliche Treiber. Unter Linux und macOS sind beide meist schon dabei.
+- **Finger weg von Angeboten direkt aus China**, wenn es schnell gehen soll — bei den Billigsten berichten Bewertungen von verbogenen Pins und Boards, die beim ersten Einschalten durchbrennen. Deshalb zwei Stück bestellen.
+
 ---
 
 ## Welle 2: Haustür (nach dem Messen am Taster)
@@ -63,7 +90,7 @@ Nach dieser Welle kannst du den kompletten Software-Teil abhaken: Firmware flash
 | Teil | Suchbegriff / Beispiel | Menge | ca. | Hinweis |
 |---|---|---|---|---|
 | PhotoMOS-Relais | **Panasonic AQY212EH** (AQY21x-Familie) | 2 | je 3–6 € | **Auf das Gehäuse achten:** Durchsteckvariante für die Lochrasterplatine, nicht die SMD-Ausführung. Beim Händler Datenblatt gegenprüfen (Lastspannung, Laststrom, LED-Strom), bevor du bestellst. Bei Reichelt, Conrad, Mouser oder Digi-Key kaufen — bei Marktplatz-Ware gibt es Fälschungen. |
-| Widerstand 220 Ω | 1/4 W, Metallschicht, 10er-Pack | 1 | 1–2 € | Vorwiderstand für die LED-Seite des PhotoMOS (GPIO 26 → 220 Ω → Pin 1). |
+| Widerstand 220 Ω | 1/4 W, Metallschicht, 10er-Pack | 1 | 1–2 € | Vorwiderstand für die LED-Seite des PhotoMOS (GPIO 26 → 220 Ω → Pin 1). **Entfällt**, wenn du das LED-/Widerstandsset aus der Amazon-Liste in Welle 1 (Pos 3) nimmst. |
 | Litze flexibel 0,14 mm² (AWG 26) | rot und schwarz, je 5–10 m | 1 Set | 5–8 € | Dünn und weich, damit die Lötstellen auf der Ritto-Platine nicht mechanisch belastet werden. |
 | Steckverbinder 2-polig | JST-XH-Set mit Crimpzange, **oder** einfacher: 2-polige Schraubklemme / Dupont-Steckerpaar | 1 | 3–12 € | Laut Konzept-Entscheidung soll die Verbindung zum ESP32 **steckbar** sein, damit das Telefon beim Rückbau einfach abgeht. |
 | Schrumpfschlauch-Sortiment | 1–6 mm | 1 | 4–6 € | |
