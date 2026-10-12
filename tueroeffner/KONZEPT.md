@@ -18,18 +18,13 @@ Alles läuft lokal auf einem Mikrocontroller, ohne Cloud und ohne App-Installati
 
 Der Code-Entwurf in `firmware/` ist für den **ESP32 mit Arduino-Core 3.x** geschrieben.
 
-### Einkaufsliste (Richtwerte)
+### Einkaufsliste
 
-| Teil | Zweck | ca. Preis |
-|---|---|---|
-| ESP32-DevKitC | Steuerung + Webserver | 10 € |
-| PhotoMOS-Relais **AQY212EH** (oder Panasonic AQY21x-Familie) + 220 Ω | potentialfreier Kontakt für die Gegensprechanlage | 3 € |
-| *alternativ:* 1-Kanal-Relaismodul 3,3 V mit Optokoppler | falls die Anlage mehr Strom über den Kontakt schickt (siehe 2.) | 4 € |
-| Servo mit **≥ 35 kg·cm** (z. B. DS3235, DS3240, oder 60 kg·cm DS5160) | Klinke drücken | 25–40 € |
-| Netzteil 6–7,4 V / ≥ 3 A (oder 5 V/3 A + Servo-tauglicher Step-Up) | Servo-Versorgung | 12 € |
-| Step-Down auf 5 V oder zweites USB-Netzteil | ESP32-Versorgung | 5 € |
-| Elko 1000 µF / 16 V am Servo | puffert Stromspitzen, verhindert ESP-Resets | 1 € |
-| Klemm-Halterung (3D-Druck oder Alu-Winkel) | Servo an der Tür ohne Bohren | – |
+Konkrete Teile, Mengen, Richtpreise und Bezugsquellen stehen in **[EINKAUFSLISTE.md](EINKAUFSLISTE.md)**, aufgeteilt in Bestellwellen.
+
+Grobes Budget: ca. 40–60 € für den reinen Softwaretest (ESP32 + LED als Platzhalter), ca. 130–190 € für den kompletten Aufbau mit beiden Türen, zuzüglich Werkzeug.
+
+Wichtig: Servo und PhotoMOS erst bestellen, **nachdem** Klinkenkraft und Taster-Spannung gemessen sind (Schritt 2 und 3 unter „Nächste Schritte“). Beide Bauteile hängen direkt am Messergebnis.
 
 ---
 
@@ -156,11 +151,13 @@ Zusätzlich empfohlen:
 
 ## 7. Nächste Schritte
 
-1. Haustelefon aufschrauben, Hersteller/Typ notieren, Foto machen. Damit lässt sich klären, ob Taste-Brücken reicht oder ein Bus-Adapter nötig ist.
+1. Haustelefon aufschrauben (Typ ist bekannt: Ritto TwinBus 4630/01), Platine und Verkabelung fotografieren und den **Türöffner-Taster auf der Platine** identifizieren.
 2. Türöffner-Taste durchmessen (Spannung, ggf. Strom).
 3. Klinkenkraft grob messen: Kofferwaage ans Griffende, runterziehen, Wert ablesen.
 4. WLAN-Empfang an Haustür und Briefkasten prüfen.
 5. Firmware flashen, erst nur mit LED statt Relais und Servo frei in der Hand testen.
+
+Die passende Bestellreihenfolge dazu steht am Ende von [EINKAUFSLISTE.md](EINKAUFSLISTE.md): Welle 1 kann sofort raus, Welle 2 und 3 erst nach dem Messen.
 
 ---
 
