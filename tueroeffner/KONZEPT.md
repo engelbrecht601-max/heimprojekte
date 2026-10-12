@@ -60,6 +60,17 @@ Mit dem Multimeter an den beiden Kontakten der Türöffner-Taste:
 - Relais oder PhotoMOS trennen galvanisch: auf der einen Seite nur die LED/Spule (ESP-Seite), auf der anderen nur ein Schaltkontakt (Anlagen-Seite).
 - **Niemals** direkt an 230 V oder am Klingeltrafo im Verteiler arbeiten. Wir bleiben ausschließlich am Haustelefon in der Wohnung, auf Kleinspannungsseite.
 
+### Bei uns verbaut: Ritto TwinBus Wohntelefon 4630/01
+
+Stand 12.10.2026, laut Foto der Platine: **Ritto TwinBus**, Wohntelefon 4630/01 (Version 2.10), 4 Adern an Klemme KL1 (`a`, `b` = Bus, dazu zwei weitere Adern). Damit gilt:
+
+- **Nicht** an den Klemmen `a`/`b` brücken. Das schließt den Bus kurz und kann die Anlage im ganzen Haus stören.
+- Stattdessen wird der **Schlüssel-Taster auf der Platine** angezapft. Die beiden weißen Tasten rechts auf der Platine sind nur Stößel, darunter sitzen die eigentlichen Taster. Zwei dünne Litzen an die Lötpunkte des Türöffner-Tasters, daran der PhotoMOS (AQY212EH) parallel. Das Telefon „drückt“ dann selbst und sendet das passende Bus-Telegramm.
+- Den richtigen Taster und seine Pins vorher bestimmen: Telefon eingebaut lassen, mit dem Multimeter die Spannung über die Taster-Pins messen, Taste drücken. Die Spannung fällt beim Drücken auf etwa 0 V. Die Polarität (welcher Pin höher liegt) notieren, falls doch ein Optokoppler mit Transistorausgang statt PhotoMOS verwendet wird.
+- **Mietfreundliche Variante:** Ein zweites, gebrauchtes Ritto TwinBus Wohntelefon 4630 besorgen (gebraucht meist günstig), nur dieses umbauen und gegen das Original tauschen. Das Original bleibt unverändert und kommt beim Auszug wieder rein. Das Ersatzgerät muss der Wohnung zugeordnet werden, dafür ist der gelbe **Program**-Taster da (Ablauf laut Ritto-Anleitung zum 4630, vor dem Tausch nachlesen).
+- **Entscheidung (12.10.2026):** Umgebaut wird das vorhandene Telefon, beim Auszug wird zurückgebaut. Dafür: vorher Platine und Verkabelung fotografieren, Klemmblock KL1 zum Löten abziehen (Telefon dann vom Bus getrennt), Litzen zugentlasten und über einen 2-poligen Stecker zum ESP32 führen. Rückbau = Litzen ablöten, Lötstellen säubern.
+- Bei TwinBus darf der Türöffner in der Regel auch ohne vorheriges Klingeln ausgelöst werden. Das trotzdem einmal von Hand testen.
+
 ### Häufige Stolperfalle
 Manche Anlagen lassen den Türöffner nur **innerhalb eines Zeitfensters nach dem Klingeln** zu (z. B. 30 s). Teste daher zuerst: Geht der Türöffner am Haustelefon, ohne dass vorher jemand geklingelt hat? Wenn nicht, müsste der Ablauf „erst klingeln, dann in der App öffnen“ sein, was für den QR-Code-Ablauf sogar ganz natürlich ist.
 
