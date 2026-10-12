@@ -6,9 +6,9 @@
 #define MDNS_NAME     "tuer"            // erreichbar als http://tuer.local
 
 // ---------- Pins ----------
-#define PIN_RELAIS_HAUSTUER 26          // -> 220 Ohm -> PhotoMOS AQY212EH (oder Relaismodul IN)
+#define PIN_RELAIS_HAUSTUER 26          // -> IN des Relaismoduls (VCC des Moduls an 3V3/5V, NICHT an einen GPIO)
 #define PIN_SERVO           25          // Signalleitung Servo
-#define RELAIS_AKTIV_HIGH   true        // viele Relaismodule schalten bei LOW: dann false
+#define RELAIS_AKTIV_HIGH   false       // Low-Level-Trigger (verbautes Modul). High-Level-Modul: true
 
 // ---------- Haustür ----------
 #define HAUSTUER_PULS_MS 3000           // so lange wird "die Taste gedrückt"

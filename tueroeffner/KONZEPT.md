@@ -18,18 +18,13 @@ Alles läuft lokal auf einem Mikrocontroller, ohne Cloud und ohne App-Installati
 
 Der Code-Entwurf in `firmware/` ist für den **ESP32 mit Arduino-Core 3.x** geschrieben.
 
-### Einkaufsliste (Richtwerte)
+### Einkaufsliste
 
-| Teil | Zweck | ca. Preis |
-|---|---|---|
-| ESP32-DevKitC | Steuerung + Webserver | 10 € |
-| PhotoMOS-Relais **AQY212EH** (oder Panasonic AQY21x-Familie) + 220 Ω | potentialfreier Kontakt für die Gegensprechanlage | 3 € |
-| *alternativ:* 1-Kanal-Relaismodul 3,3 V mit Optokoppler | falls die Anlage mehr Strom über den Kontakt schickt (siehe 2.) | 4 € |
-| Servo mit **≥ 35 kg·cm** (z. B. DS3235, DS3240, oder 60 kg·cm DS5160) | Klinke drücken | 25–40 € |
-| Netzteil 6–7,4 V / ≥ 3 A (oder 5 V/3 A + Servo-tauglicher Step-Up) | Servo-Versorgung | 12 € |
-| Step-Down auf 5 V oder zweites USB-Netzteil | ESP32-Versorgung | 5 € |
-| Elko 1000 µF / 16 V am Servo | puffert Stromspitzen, verhindert ESP-Resets | 1 € |
-| Klemm-Halterung (3D-Druck oder Alu-Winkel) | Servo an der Tür ohne Bohren | – |
+Konkrete Teile, Mengen, Richtpreise und Bezugsquellen stehen in **[EINKAUFSLISTE.md](EINKAUFSLISTE.md)**, aufgeteilt in Bestellwellen.
+
+Grobes Budget: ca. 40–60 € für den reinen Softwaretest (ESP32 + LED als Platzhalter), ca. 130–190 € für den kompletten Aufbau mit beiden Türen, zuzüglich Werkzeug.
+
+Wichtig: Den **Servo** erst bestellen, **nachdem** die Klinkenkraft gemessen ist (Schritt 3 unter „Nächste Schritte“) — die Größe hängt direkt am Messergebnis. Alles andere kann sofort raus.
 
 ---
 
@@ -52,12 +47,15 @@ Mit dem Multimeter an den beiden Kontakten der Türöffner-Taste:
 1. **Spannung offen** (Taste nicht gedrückt), DC und AC messen.
 2. **Strom bei gedrückter Taste** (Multimeter in Reihe), falls möglich.
 
-- **< 60 V und < 0,4 A** (der Normalfall bei 1+n/Bus-Tasten, oft nur ein paar mA): **PhotoMOS AQY212EH**. Lautlos, kein Prellen, 5 kV Trennung, schaltet AC und DC. LED-Seite: ESP32-Pin → 220 Ω → Pin 1 (Anode), Pin 2 (Kathode) → GND. Ausgang Pin 3/4 parallel zur Taste.
-- **Mehr Strom** (z. B. bei alten Anlagen, bei denen die Taste direkt den Türöffner-Magneten mit 8–12 V AC / ~1 A schaltet): **Relaismodul mit Optokoppler**, Kontakte ≥ 2 A, Schließer (NO) parallel zur Taste.
+**Entscheidung (12.10.2026): 1-Kanal-Relaismodul mit Optokoppler, Low-Level-Trigger.** Der Schließer (NO) kommt parallel zur Taste, `IN` an GPIO 26, `VCC` an den 3V3- oder 5V-Pin des ESP32 — **nicht an einen GPIO**: das Modul zieht rund 100 mA, ein ESP32-GPIO darf etwa 40 mA.
+
+Damit entscheidet die Messung **nicht mehr über das Bauteil**. Die üblichen Modulkontakte (10 A / 250 V AC) liegen weit über allem, was eine Türöffner-Taste führt, egal ob 1+n oder Bus. Die Messung bestätigt nur noch, dass du auf Kleinspannung bist, und hilft beim Finden des richtigen Tasters.
+
+Was du dafür in Kauf nimmst: Ein mechanisches Relais **klickt** hörbar und prellt beim Schalten. Für einen 3-Sekunden-Puls am Türöffner ist beides harmlos. Dafür ist die galvanische Trennung hier ein echter Luftspalt und hängt nicht an einer Datenblattangabe — bei No-Name-Ware das deutlich stärkere Argument als bei einem Halbleiter, dessen Isolationsfestigkeit man nicht nachmessen kann.
 
 ### Potentialtrennung, warum das wichtig ist
 - Die Gegensprechanlage hat ihr eigenes Netzteil und ihre eigene Masse. Der ESP32 darf **keine elektrische Verbindung** dazu haben, sonst riskierst du Fehlströme, Brummen auf der Sprechleitung oder einen kaputten ESP bzw. eine kaputte Anlage.
-- Relais oder PhotoMOS trennen galvanisch: auf der einen Seite nur die LED/Spule (ESP-Seite), auf der anderen nur ein Schaltkontakt (Anlagen-Seite).
+- Das Relaismodul trennt galvanisch: auf der ESP-Seite nur Optokoppler und Relaisspule, auf der Anlagen-Seite nur der Schaltkontakt. Dazwischen liegt im Relais ein Luftspalt.
 - **Niemals** direkt an 230 V oder am Klingeltrafo im Verteiler arbeiten. Wir bleiben ausschließlich am Haustelefon in der Wohnung, auf Kleinspannungsseite.
 
 ### Bei uns verbaut: Ritto TwinBus Wohntelefon 4630/01
@@ -65,8 +63,8 @@ Mit dem Multimeter an den beiden Kontakten der Türöffner-Taste:
 Stand 12.10.2026, laut Foto der Platine: **Ritto TwinBus**, Wohntelefon 4630/01 (Version 2.10), 4 Adern an Klemme KL1 (`a`, `b` = Bus, dazu zwei weitere Adern). Damit gilt:
 
 - **Nicht** an den Klemmen `a`/`b` brücken. Das schließt den Bus kurz und kann die Anlage im ganzen Haus stören.
-- Stattdessen wird der **Schlüssel-Taster auf der Platine** angezapft. Die beiden weißen Tasten rechts auf der Platine sind nur Stößel, darunter sitzen die eigentlichen Taster. Zwei dünne Litzen an die Lötpunkte des Türöffner-Tasters, daran der PhotoMOS (AQY212EH) parallel. Das Telefon „drückt“ dann selbst und sendet das passende Bus-Telegramm.
-- Den richtigen Taster und seine Pins vorher bestimmen: Telefon eingebaut lassen, mit dem Multimeter die Spannung über die Taster-Pins messen, Taste drücken. Die Spannung fällt beim Drücken auf etwa 0 V. Die Polarität (welcher Pin höher liegt) notieren, falls doch ein Optokoppler mit Transistorausgang statt PhotoMOS verwendet wird.
+- Stattdessen wird der **Schlüssel-Taster auf der Platine** angezapft. Die beiden weißen Tasten rechts auf der Platine sind nur Stößel, darunter sitzen die eigentlichen Taster. Zwei dünne Litzen an die Lötpunkte des Türöffner-Tasters, daran der Schließer (NO) des Relaismoduls parallel. Das Telefon „drückt“ dann selbst und sendet das passende Bus-Telegramm.
+- Den richtigen Taster und seine Pins vorher bestimmen: Telefon eingebaut lassen, mit dem Multimeter die Spannung über die Taster-Pins messen, Taste drücken. Die Spannung fällt beim Drücken auf etwa 0 V. Auf die Polarität musst du dabei nicht achten: der Relaiskontakt ist ein potentialfreier Schließer und schaltet in beide Richtungen, AC wie DC.
 - **Mietfreundliche Variante:** Ein zweites, gebrauchtes Ritto TwinBus Wohntelefon 4630 besorgen (gebraucht meist günstig), nur dieses umbauen und gegen das Original tauschen. Das Original bleibt unverändert und kommt beim Auszug wieder rein. Das Ersatzgerät muss der Wohnung zugeordnet werden, dafür ist der gelbe **Program**-Taster da (Ablauf laut Ritto-Anleitung zum 4630, vor dem Tausch nachlesen).
 - **Entscheidung (12.10.2026):** Umgebaut wird das vorhandene Telefon, beim Auszug wird zurückgebaut. Dafür: vorher Platine und Verkabelung fotografieren, Klemmblock KL1 zum Löten abziehen (Telefon dann vom Bus getrennt), Litzen zugentlasten und über einen 2-poligen Stecker zum ESP32 führen. Rückbau = Litzen ablöten, Lötstellen säubern.
 - Bei TwinBus darf der Türöffner in der Regel auch ohne vorheriges Klingeln ausgelöst werden. Das trotzdem einmal von Hand testen.
@@ -156,11 +154,13 @@ Zusätzlich empfohlen:
 
 ## 7. Nächste Schritte
 
-1. Haustelefon aufschrauben, Hersteller/Typ notieren, Foto machen. Damit lässt sich klären, ob Taste-Brücken reicht oder ein Bus-Adapter nötig ist.
+1. Haustelefon aufschrauben (Typ ist bekannt: Ritto TwinBus 4630/01), Platine und Verkabelung fotografieren und den **Türöffner-Taster auf der Platine** identifizieren.
 2. Türöffner-Taste durchmessen (Spannung, ggf. Strom).
 3. Klinkenkraft grob messen: Kofferwaage ans Griffende, runterziehen, Wert ablesen.
 4. WLAN-Empfang an Haustür und Briefkasten prüfen.
 5. Firmware flashen, erst nur mit LED statt Relais und Servo frei in der Hand testen.
+
+Die passende Bestellreihenfolge dazu steht am Ende von [EINKAUFSLISTE.md](EINKAUFSLISTE.md): Welle 1 kann sofort raus, Welle 2 und 3 erst nach dem Messen.
 
 ---
 
