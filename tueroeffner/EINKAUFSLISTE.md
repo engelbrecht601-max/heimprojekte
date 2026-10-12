@@ -81,7 +81,7 @@ Direkt bestellbar, ohne auf Messwerte zu warten. Die **ASIN** ist jeweils der da
 
 - **38-polige Variante.** Die Firmware nutzt GPIO 25 und 26 (`config.example.h`); auf den kleineren 30-Pin-Boards fehlen die teils.
 - **USB-Chip:** CH340 oder CP2102. Beide funktionieren, brauchen unter Windows aber unterschiedliche Treiber. Unter Linux und macOS sind beide meist schon dabei.
-- **Finger weg von Angeboten direkt aus China**, wenn es schnell gehen soll — bei den Billigsten berichten Bewertungen von verbogenen Pins und Boards, die beim ersten Einschalten durchbrennen. Deshalb zwei Stück bestellen.
+- **No-Name ist hier völlig in Ordnung** und deutlich günstiger. Einzige Konsequenz: die Ausfallquote ist höher — bei den billigsten Angeboten berichten Bewertungen von verbogenen Pins und Boards, die beim ersten Einschalten sterben. Deshalb zwei Stück, dann ist der Ersatz schon da statt in zwei Wochen.
 
 ---
 
@@ -89,7 +89,7 @@ Direkt bestellbar, ohne auf Messwerte zu warten. Die **ASIN** ist jeweils der da
 
 | Teil | Suchbegriff / Beispiel | Menge | ca. | Hinweis |
 |---|---|---|---|---|
-| PhotoMOS-Relais | **Panasonic AQY212EH** (AQY21x-Familie) | 2 | je 3–6 € | **Auf das Gehäuse achten:** Durchsteckvariante für die Lochrasterplatine, nicht die SMD-Ausführung. Beim Händler Datenblatt gegenprüfen (Lastspannung, Laststrom, LED-Strom), bevor du bestellst. Bei Reichelt, Conrad, Mouser oder Digi-Key kaufen — bei Marktplatz-Ware gibt es Fälschungen. |
+| PhotoMOS-Relais | **Panasonic AQY212EH** (AQY21x-Familie) | 2 | je 3–6 € | **Auf das Gehäuse achten:** Durchsteckvariante für die Lochrasterplatine, nicht die SMD-Ausführung. Beim Händler Datenblatt gegenprüfen (Lastspannung, Laststrom, LED-Strom), bevor du bestellst. Zur Händlerwahl siehe „Eine Ausnahme von ‚No-Name ist ok'" unten — das ist der eine Posten, bei dem die Herkunft zählt. |
 | Widerstand 220 Ω | 1/4 W, Metallschicht, 10er-Pack | 1 | 1–2 € | Vorwiderstand für die LED-Seite des PhotoMOS (GPIO 26 → 220 Ω → Pin 1). **Entfällt**, wenn du das LED-/Widerstandsset aus der Amazon-Liste in Welle 1 (Pos 3) nimmst. |
 | Litze flexibel 0,14 mm² (AWG 26) | rot und schwarz, je 5–10 m | 1 Set | 5–8 € | Dünn und weich, damit die Lötstellen auf der Ritto-Platine nicht mechanisch belastet werden. |
 | Steckverbinder 2-polig | JST-XH-Set mit Crimpzange, **oder** einfacher: 2-polige Schraubklemme / Dupont-Steckerpaar | 1 | 3–12 € | Laut Konzept-Entscheidung soll die Verbindung zum ESP32 **steckbar** sein, damit das Telefon beim Rückbau einfach abgeht. |
@@ -98,13 +98,40 @@ Direkt bestellbar, ohne auf Messwerte zu warten. Die **ASIN** ist jeweils der da
 
 **Zwischensumme:** ca. 20–40 €.
 
+### Welle 2 als Amazon.de-Bestellliste
+
+| Pos | Artikel | Menge | Hinweis |
+|---|---|---|---|
+| 1 | [PhotoMOS AQY212EH, 5er-Pack](https://www.amazon.de/dp/B0FP49SXLF) — ASIN `B0FP49SXLF` | 1 Set | No-Name, 5 Stück. Eine Listung nennt **60 V / 550 mA** — deckt sich mit der Annahme im Konzept. Einzelstück: [`B0CX18THFP`](https://www.amazon.de/dp/B0CX18THFP). Die Panasonic-Originallistung [`B017U4VSWM`](https://www.amazon.de/dp/B017U4VSWM) stand im Index auf „nicht verfügbar". Siehe die Ausnahme unten. |
+| 2 | [Relaismodul 3,3 V, Low-Level-Trigger, mit Optokoppler](https://www.amazon.de/dp/B0CL748J9C) — ASIN `B0CL748J9C` | 1 | Der **Fallback aus dem Konzept — und bei Amazon die robustere Beschaffung als der PhotoMOS.** Alternativen: [`B0DBZQVWPM`](https://www.amazon.de/dp/B0DBZQVWPM), [`B0DJ6PD435`](https://www.amazon.de/dp/B0DJ6PD435) (3,3 V **und** 5 V). Zwei Dinge beachten, siehe unten. |
+| 3 | [Schrumpfschlauch-Set, 100 Stück, 6 Größen, 2:1](https://www.amazon.de/dp/B003H9CJ1Y) — ASIN `B003H9CJ1Y` | 1 | Billigste brauchbare Variante. Alternative **mit Kabelbindern drin**: [`B004CRC352`](https://www.amazon.de/dp/B004CRC352) — spart die eigene Kabelbinder-Zeile. |
+| 4 | [Zwillingslitze 0,14 mm², 10 m, 2-adrig](https://www.amazon.de/dp/B002QE5OKY) — ASIN `B002QE5OKY` | 1 | 2-adrig heißt: ein Kabel zum Telefon statt zwei einzelne. 10 m ist für zwei 30-cm-Strippen reichlich, aber die kleinste sinnvolle Menge. Einzelspule 25 m: [`B0774W79T7`](https://www.amazon.de/dp/B0774W79T7). |
+| 5 | Steckverbinder 2-polig | 0 | **Entfällt.** Nimm zwei Jumperkabel aus Welle 1 Pos 2, schneide eine Seite ab und löte sie an — das ist genau der steckbare Übergang, den das Konzept für den Rückbau will. |
+| 6 | Widerstand 220 Ω | 0 | **Entfällt**, steckt im LED-Set aus Welle 1 Pos 3. |
+
+#### Beim Relaismodul zwei Dinge beachten
+
+- **VCC des Moduls an den 3V3- oder 5V-Pin des ESP32, nicht an einen GPIO.** Eine Bewertung misst rund 100 mA Stromaufnahme; ein ESP32-GPIO darf etwa 40 mA. An den GPIO kommt nur `IN`.
+- **Low-Level-Trigger heißt `RELAIS_AKTIV_HIGH false`** in `config.h`. Das genannte Modul schaltet bei 0 V am Eingang. Bewertungen zu anderen 3,3-V-Modulen berichten, dass die Relaisspule bei 3,3 V nicht sicher anzieht und 5 V braucht — dann die 5-V-Variante nehmen und vom 5V-Pin versorgen.
+
+#### Eine Ausnahme von „No-Name ist ok"
+
+Beim Breadboard, beim Servo, bei Litze und Gehäuse ist No-Name folgenlos — da bin ich ganz bei dir. Der PhotoMOS ist der eine Posten, bei dem es das nicht ist: er stellt die **galvanische Trennung zwischen ESP32 und Ritto-Bus** her. Ein falsch deklariertes Teil mit geringerer Isolationsfestigkeit kann die Gegensprechanlage beschädigen, und die gehört dem Vermieter und hängt am ganzen Haus. Dass die Amazon-Listungen bei Strom und Isolationsspannung widersprüchliche Werte nennen (0,55 A gegen 1 A, 3750 Vrms „je nach Modell"), ist genau dieses Problem.
+
+Zwei Wege, beide legitim:
+
+- **Günstig und trotzdem sauber: Pos 2, das Relaismodul.** Ein mechanisches Relais trennt durch einen Luftspalt, den man sehen kann — die Trennung hängt nicht an einer Datenblattangabe. Damit ist der No-Name-Weg hier sogar der unkritischere, und es kostet 4–7 € statt 25 €.
+- **PhotoMOS vom Distributor**, bei Reichelt oder Mouser, 3–6 € statt ~2 €. Dafür lautlos und ohne Klicken direkt neben der Wohnungstür.
+
+Deine Entscheidung — nur nicht der No-Name-PhotoMOS als einziges Trennglied, ohne das gemessen zu haben.
+
 ---
 
 ## Welle 3: Wohnungstür (nach der Kraftmessung)
 
 | Teil | Suchbegriff / Beispiel | Menge | ca. | Hinweis |
 |---|---|---|---|---|
-| Starker Servo | **DS3235** (35 kg·cm) oder **DS5160** (60 kg·cm), Metallgetriebe, 180°/270° | 1 | 25–45 € | Siehe Nennspannungs-Hinweis unten. Beim Kauf über AliExpress nur im offiziellen DSSERVO-Store, sonst drohen Fälschungen mit Plastikgetriebe. |
+| Starker Servo | **DS3235** (35 kg·cm) oder **DS5160** (60 kg·cm), Metallgetriebe, 180°/270° | 1 | 25–45 € | Siehe Nennspannungs-Hinweis unten. No-Name-Klone tun es hier problemlos — im schlechtesten Fall liefern sie etwas weniger Drehmoment als angegeben, was die Reserve-Empfehlung unten ohnehin abdeckt. |
 | Netzteil für den Servo | Steckernetzteil **6 V oder 7,5 V, ≥ 4 A** (besser 5 A), Hohlstecker 5,5/2,1 mm | 1 | 14–22 € | **Mehr als die 3 A aus dem Konzept:** Der Anlaufstrom eines 35-kg-Servos liegt bei mehreren Ampere, bei 60 kg·cm noch höher. Ein knappes Netzteil bricht beim Drücken in der Spannung ein und der Servo ruckelt oder schafft die Klinke nicht. |
 | DC-Einbaubuchse 5,5/2,1 mm | mit Schraubklemme | 2 | je 2 € | |
 | Elko 1000 µF / 25 V | low ESR, radial | 2 | je 1 € | Direkt an die Servo-Versorgung. 25 V statt 16 V kostet dasselbe und hält länger. Puffert die Stromspitze, verhindert ESP32-Resets. |
@@ -124,6 +151,33 @@ Die Drehmomentangaben solcher Servos gelten fast immer bei **7,4 V**. Bei 6 V li
 - Gemessene Klinkenkraft klar niedrig (≤ 2,5 kg am Griffende) → DS3235 mit 7,4-V-Netzteil ist in Ordnung.
 - Alles darüber oder Unsicherheit → **DS5160 (60 kg·cm)** nehmen. Die 10–15 € Mehrpreis sind billiger als ein zweiter Bestellvorgang, und Reserve bedeutet hier: der Servo drückt langsam und kraftvoll statt am Anschlag zu würgen.
 - Servo-Netzteil nie über den ESP32 versorgen und umgekehrt. Zwei getrennte Netzteile, nur die Masse verbinden (so steht es auch im Konzept).
+
+### Welle 3 als Amazon.de-Bestellliste
+
+| Pos | Artikel | Menge | Hinweis |
+|---|---|---|---|
+| 1 | [DS3235 Servo, 35 kg·cm, 2er-Pack, **180°**](https://www.amazon.de/dp/B0CX97XF9J) — ASIN `B0CX97XF9J` | 1 Set | Laut Listung 23–35 kg·cm bei 5–8,4 V, IP66, Edelstahlgetriebe. **180° nehmen, nicht 270°** — Begründung unten. 2er-Pack, weil der erste Einstellversuch an der Klinke erfahrungsgemäß nicht der letzte ist. |
+| 1a | [DS3235 mit 25T-Metallarm im Lieferumfang](https://www.amazon.de/dp/B0DGQBD8K5) — ASIN `B0DGQBD8K5` | Alt. | Spart Pos 6. Achtung: dort 180°/360°-Varianten, die **270er-Option meiden**. |
+| 1b | [DS5160, 60 kg·cm, 270°, IP67](https://www.amazon.de/dp/B09VS3SHVD) — ASIN `B09VS3SHVD` | Alt. | 6–8,4 V. Nimm den, wenn die Kofferwaage über 2,5 kg zeigt. Weitere 35-kg-Optionen: [`B0CBX6N5RX`](https://www.amazon.de/dp/B0CBX6N5RX), [`B07YWD857N`](https://www.amazon.de/dp/B07YWD857N), [`B08THYMY3Y`](https://www.amazon.de/dp/B08THYMY3Y). |
+| 2 | [Steckernetzteil 6 V, Stromstärke wählbar 1–5 A, Hohlstecker 5,5/2,1](https://www.amazon.de/dp/B08YJSWDWK) — ASIN `B08YJSWDWK` | 1 | **Beim Bestellen die 4-A- oder 5-A-Variante auswählen.** Siehe Spannungs-Hinweis unten. |
+| 3 | [DC-Einbaubuchse 5,5 × 2,1 mm mit Schraubklemme, 5er](https://www.amazon.de/dp/B07GYM4BKH) — ASIN `B07GYM4BKH` | 1 Set | Bringt den Hohlstecker des Netzteils lötfrei auf Litze. Alternativen: [`B00N7I1L6E`](https://www.amazon.de/dp/B00N7I1L6E), [`B09PD6J4BN`](https://www.amazon.de/dp/B09PD6J4BN). |
+| 4 | [Elko 1000 µF / 25 V, radial, 105 °C, 5er](https://www.amazon.de/dp/B0CF6DG7XV) — ASIN `B0CF6DG7XV` | 1 Set | Direkt an die Servo-Versorgung. 20er-Pack mit Rubycon: [`B07C31V5YZ`](https://www.amazon.de/dp/B07C31V5YZ). |
+| 5 | [WAGO 221-412, 50 Stück](https://www.amazon.de/dp/B08768VL3Z) — ASIN `B08768VL3Z` | 1 Set | Massen von Servo-Netzteil und ESP32 verbinden. Klemmt feindrähtig ab 0,14 mm² — passt also zur Litze aus Welle 2. |
+| 6 | Servohorn 25T Metall | 0–1 | Liegt bei den meisten DS3235-Angeboten bei (eine Bewertung bestätigt 25 Zähne). Erst nach Erhalt nachkaufen, oder gleich Pos 1a nehmen. |
+| 7 | Alu-Flachprofil 2 × 20 mm, Moosgummi, Montageband | – | **Baumarkt.** Billiger als jeder Amazon-Versand und du kannst das Profil direkt vor Ort ablängen. |
+
+#### Warum 180° und nicht 270°
+
+Beide Varianten kosten gleich viel, aber die Firmware fährt den Servo mit Pulsbreiten von 1000–1900 µs (`SERVO_RUHE_US` / `SERVO_GEDRUECKT_US`). Bei einem 270°-Servo deckt derselbe Pulsbereich etwa die 1,5-fache Winkelstrecke ab: jede Mikrosekunde bewegt den Arm weiter, die Einstellung wird gröber und Überschwingen drückt die Klinke gegen den Anschlag. Für die rund 45°, die wir brauchen, ist die 180°-Variante feiner auflösbar. Wenn nur 270° lieferbar ist, geht das auch — dann die beiden Pulswerte entsprechend näher zusammenlegen.
+
+#### Netzteil: 6 V statt 7,5 V
+
+Ein 7,5-V-Netzteil mit ≥ 4 A war nicht zu finden; die 7,5-V-Angebote liegen bei 800 mA, das ist viel zu wenig. Die Serie aus Pos 2 gibt es nur in 5 V, 6 V und 12 V. Also **6 V mit 4–5 A**:
+
+- 12 V wäre zu viel — der DS3235 ist für 5–8,4 V angegeben, 12 V zerstört ihn.
+- 6 V kostet gegenüber 7,4 V rund 15–20 % Drehmoment, die Listung nennt 23–35 kg·cm über den Spannungsbereich. Das ist der Grund, bei unklarer Kraftmessung direkt den DS5160 zu nehmen.
+- Polarität vor dem Anstecken prüfen: bei 5,5/2,1-Steckern ist innen meist plus, aber nicht immer.
+- Wer 7,4 V will: 2S-LiPo oder ein Labornetzteil. Für eine dauerhaft verbaute Lösung an der Wohnungstür ist das 6-V-Steckernetzteil die unaufwendigere Variante.
 
 ---
 
@@ -173,10 +227,10 @@ Die Drehmomentangaben solcher Servos gelten fast immer bei **7,4 V**. Bei 6 V li
 
 | Händler | Wofür | Lieferzeit |
 |---|---|---|
-| Reichelt, Conrad | PhotoMOS, Widerstände, Elkos, Gehäuse, Lochraster, Litze — Originalware mit Datenblatt | 1–3 Tage |
+| Reichelt, Conrad | Nur noch für den PhotoMOS wirklich nötig (Originalware mit Datenblatt). Alles andere ist bei Amazon oder AliExpress billiger. | 1–3 Tage |
 | Mouser, Digi-Key | PhotoMOS, wenn bei Reichelt/Conrad nicht lieferbar | 2–5 Tage |
 | Amazon | ESP32-Boards, Breadboard, Jumperkabel, Werkzeug, wenn es schnell gehen soll | 1–2 Tage |
-| AliExpress (offizieller DSSERVO-Store) | Servo deutlich günstiger | 2–4 Wochen |
+| AliExpress | Servo und Kleinteile am günstigsten, No-Name ist für alles außer dem PhotoMOS unkritisch | 2–4 Wochen |
 | Baumarkt | Alu-Profil, Montageband, Moosgummi, Schraubzwinge | sofort |
 
 Praktisch: Werkzeug und Welle 1 zusammen bei einem Händler bestellen, den Servo wegen der Lieferzeit **direkt nach der Kraftmessung** separat — der ist sonst der Posten, auf den du am Ende drei Wochen wartest.
