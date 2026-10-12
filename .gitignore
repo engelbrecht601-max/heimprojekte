@@ -1,0 +1,4 @@
+# Lokale Zugangsdaten (WLAN, PINs) nie committen
+**/config.h
+build/
+.vscode/
